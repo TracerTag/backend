@@ -1,10 +1,15 @@
-FROM ubuntu
-RUN rm /bin/sh && ln -s /bin/bash /bin/sh
-RUN apt update && apt install -y python3 python3-pip python3.12-venv
+FROM fedora
+RUN dnf update -y && dnf install -y python3.10 git curl python3-opencv
 
+# Break system packages? Hackathon shortcut here
+RUN curl -sS https://bootstrap.pypa.io/get-pip.py -o /tmp/get-pip.py && python3.10 /tmp/get-pip.py --break-system-packages
+
+COPY models /mnt/models
 COPY requirements.txt /tmp/requirements.txt
+
+
 # mmm, well upsie an hackathon
-RUN pip3 install --break-system-packages -r /tmp/requirements.txt
+RUN pip3.10 install --break-system-packages -r /tmp/requirements.txt
 
 
 WORKDIR /home/ubuntu

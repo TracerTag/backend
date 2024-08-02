@@ -3,4 +3,4 @@ services:
   tracer-tag-api:
     image: docker.io/alessandrotaufer/tracer-tag-backend
     ports:
-      - "8000:8000"
+      - "80:8000"
