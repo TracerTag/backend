@@ -1,0 +1,6 @@
+version: "3.0"
+services:
+  tracer-tag-api:
+    image: docker.io/alessandrotaufer/tracer-tag-backend
+    ports:
+      - "8000:8000"
