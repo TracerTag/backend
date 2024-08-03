@@ -34,7 +34,11 @@ async def upload_image(file: UploadFile = File(...)):
             corner_low = {"x": box.xyxy[0][2], "y": box.xyxy[0][3]}
             middle_point = {"x": (corner_high["x"] + corner_low["x"])/2, "y": (corner_high["x"] + corner_low["x"])/2}
 
-            seg.segment_image(middle_point["x"], middle_point["y"])
+            import logging
+            logger = logging.getLogger('uvicorn.error')
+            logger.error(f"middlepoint - {middle_point['x']} - {middle_point['y']}")
+            # seg.segment_image(middle_point["x"], middle_point["y"])
+            seg.segment_image(middle_point['x'], middle_point['y'])
 
         return JSONResponse(content={"filename": file.filename, "message": f"Image uploaded successfully - {len(boxes)}"})
 

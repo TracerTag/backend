@@ -2,6 +2,8 @@ import onnxruntime
 from segment_anything import SamPredictor, sam_model_registry
 import cv2
 import numpy as np
+import svgwrite
+from scipy.spatial import ConvexHull
 
 
 class Segmentation:
@@ -42,4 +44,27 @@ class Segmentation:
         }
         masks, _, low_res_logits = self.ort_session.run(None, ort_inputs)
         masks = masks > self.predictor.model.mask_threshold
+        masks = np.concatenate(masks)
+
+        contours = []
+        for mask in masks:
+            mask_points = np.asarray(np.where(mask)).T
+            mask_convex_hull = ConvexHull(mask_points)
+            mask_contour = mask_points[mask_convex_hull.vertices]
+            contours.append(mask_contour)
+
+        contours_to_svg(contours, 'output.svg', (self.image.shape[1], self.image.shape[0]))
         return masks
+
+
+def contours_to_svg(contours, svg_filename, image_shape):
+    """ This function takes a list of countour, the desired svg filename and size and writes the countours as SVG """
+    dwg = svgwrite.Drawing(svg_filename, profile='tiny', size=image_shape)
+
+    for contour in contours:
+        # reverse points since coords are reversed by cv2
+        points = [(point[1], point[0]) for point in contour]
+        path = 'M ' + ' '.join([f'{p[0]},{p[1]}' for p in points]) + ' Z'
+        dwg.add(dwg.path(d=path, fill='none', stroke='black', stroke_width=1))
+
+    dwg.save()
