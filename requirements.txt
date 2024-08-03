@@ -1,9 +1,5 @@
 gensim
 fastapi[standard]
 ultralytics
-onnxruntime
-segment_anything
-opencv-python
 numpy
 svgwrite
-git+https://github.com/facebookresearch/segment-anything.git#egg=segment-anything
