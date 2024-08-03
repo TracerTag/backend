@@ -1,5 +1,5 @@
 FROM fedora
-RUN dnf update -y && dnf install -y python3.10 git curl python3-opencv
+RUN dnf install -y python3.10 git curl
 
 # Break system packages? Hackathon shortcut here
 RUN curl -sS https://bootstrap.pypa.io/get-pip.py -o /tmp/get-pip.py && python3.10 /tmp/get-pip.py --break-system-packages

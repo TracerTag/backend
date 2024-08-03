@@ -1,4 +1,3 @@
-gensim
 fastapi[standard]
 ultralytics
 numpy
